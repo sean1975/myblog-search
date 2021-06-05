@@ -1,5 +1,8 @@
 schema myblog {
     document myblog {
+        field language type string {
+            indexing: set_language
+        }
         field id type string {
             indexing: attribute | summary
         }

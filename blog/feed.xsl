@@ -45,14 +45,22 @@
 <xsl:template match="atom:entry">
   <xsl:variable name="id" select="substring-after(atom:id, 'post-')"/>
     <xsl:text>{</xsl:text>
-      <xsl:text>"put": "id:</xsl:text>
+      <xsl:text>"put":"id:</xsl:text>
       <xsl:value-of select="$namespace"/>
       <xsl:text>:</xsl:text>
       <xsl:value-of select="$document-type"/>
       <xsl:text>::</xsl:text>
       <xsl:value-of select="$id"/>",
-      <xsl:text>"fields": {</xsl:text>
-        <xsl:text>"id": "</xsl:text>
+      <xsl:text>"fields":{</xsl:text>
+        <xsl:text>"language":"</xsl:text>
+        <xsl:if test="atom:category[@term='Australia']">
+          <xsl:text>en</xsl:text>
+        </xsl:if>
+        <xsl:if test="not(atom:category[@term='Australia'])">
+          <xsl:text>zh-TW</xsl:text>
+        </xsl:if>
+        <xsl:text>",</xsl:text>
+        <xsl:text>"id":"</xsl:text>
         <xsl:value-of select="$id"/>
         <xsl:text>",</xsl:text>
         <xsl:apply-templates select="atom:link[@rel='alternate']|atom:title|atom:content|media:thumbnail"/>
