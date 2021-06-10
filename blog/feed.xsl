@@ -32,6 +32,21 @@
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="htmltags">
+  <xsl:param name="text" select="."/>
+  <xsl:choose>
+    <xsl:when test="contains($text, '&lt;') and contains(substring-after($text, '&lt;'), '&gt;')">
+      <xsl:value-of select="substring-before($text, '&lt;')"/>
+      <xsl:call-template name="htmltags">
+        <xsl:with-param name="text" select="substring-after(substring-after($text, '&lt;'), '&gt;')"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$text"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template match="/">
   <xsl:apply-templates select="atom:feed"/>
 </xsl:template>
@@ -85,8 +100,13 @@
 </xsl:template>
 
 <xsl:template match="atom:content">
+  <xsl:variable name="escaped">
+    <xsl:call-template name="doublequotes"/>
+  </xsl:variable>
   <xsl:text>"body":"</xsl:text>
-  <xsl:call-template name="doublequotes"/>
+  <xsl:call-template name="htmltags">
+    <xsl:with-param name="text" select="$escaped"/>
+  </xsl:call-template>
   <xsl:text>"</xsl:text>
   <xsl:if test="position() != last()"><xsl:text>,</xsl:text></xsl:if>
 </xsl:template>
