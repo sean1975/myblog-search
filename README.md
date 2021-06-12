@@ -11,3 +11,5 @@ This application is to avoid the duplication in search results.
 
 The search application is based on Vespa Text Search Tutorial
 at https://docs.vespa.ai/en/tutorials/text-search.html
+
+Live demo at http://34.87.254.125:8080/search/?query=%E9%AD%9A on Google Cloud Platform
