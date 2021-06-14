@@ -32,6 +32,11 @@ java -jar bin/vespa-http-client-jar-with-dependencies.jar \
     --verbose --file blog/feed.json --endpoint http://localhost:8080
 echo ""
 
-echo "Running a test query"
-curl -s "http://localhost:8080/search/?query=fish"
+echo "Creating docker container for frontend"
+docker run -it --detach --name myblog-search-frontend \
+     --hostname myblog-search-frontend --publish 80:80 \
+     sean1975/myblog-search:frontend
+
+echo "Running a test query" && sleep 5
+curl -s "http://localhost:80/search/?query=fish&presentation.format=xml"
 
