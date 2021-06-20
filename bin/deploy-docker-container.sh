@@ -1,9 +1,10 @@
 #!/bin/bash
 
 echo "Creating docker container"
-docker run -m 12G --detach --name myblog-search --hostname myblog-search \
+docker run -m 12G --detach --name myblog-search-vespa \
+    --hostname myblog-search-vespa \
     --publish 8080:8080 --publish 19112:19112 --publish 19071:19071 \
-    sean1975/myblog-search
+    sean1975/myblog-search:vespa
 
 while [[ $(curl -s --head http://localhost:19071/ApplicationStatus | grep "^HTTP.*" | cut -d\  -f2) != "200" ]]; do
     echo "Waiting for vespa config server"
@@ -11,7 +12,7 @@ while [[ $(curl -s --head http://localhost:19071/ApplicationStatus | grep "^HTTP
 done
 
 echo "Creating application package"
-(cd application && zip -r - .) | \
+(cd vespa/application && zip -r - .) | \
   curl --header Content-Type:application/zip --data-binary @- \
   localhost:19071/application/v2/tenant/default/prepareandactivate
 echo ""
@@ -33,9 +34,9 @@ java -jar bin/vespa-http-client-jar-with-dependencies.jar \
 echo ""
 
 echo "Creating docker container for frontend"
-docker run -it --detach --name myblog-search-frontend \
-     --hostname myblog-search-frontend --publish 80:80 \
-     sean1975/myblog-search:frontend
+docker run -it --detach --name myblog-search-nginx \
+     --hostname myblog-search-nginx --publish 80:80 \
+     sean1975/myblog-search:nginx
 
 echo "Running a test query" && sleep 5
 curl -s "http://localhost:80/search/?query=fish&presentation.format=xml"

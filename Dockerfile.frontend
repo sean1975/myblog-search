@@ -1,6 +1,0 @@
-FROM nginx:1.21.0
-
-COPY frontend/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY frontend/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
-COPY frontend/html/index.html /usr/share/nginx/html/index.html
-COPY frontend/xslt/result.xsl /usr/share/nginx/xslt/result.xsl
