@@ -3,23 +3,23 @@ kind: StatefulSet
 metadata:
   name: vespa
   labels:
-    app: vespa
+    app: myblog-search
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: vespa
+      app: myblog-search
       name: vespa
   serviceName: vespa
   template:
     metadata:
       labels:
-        app: vespa
+        app: myblog-search
         name: vespa
     spec:
       containers:
       - name: vespa
-        image: vespaengine/vespa
+        image: sean1975/myblog-search:vespa
         imagePullPolicy: Always
         securityContext:
           privileged: true

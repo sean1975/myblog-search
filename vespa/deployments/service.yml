@@ -5,11 +5,12 @@ metadata:
   annotations:
     cloud.google.com/load-balancer-type: "External"
   labels:
-    app: vespa
+    app: myblog-search
 spec:
   type: LoadBalancer
   selector:
-    app: vespa
+    app: myblog-search
+    name: vespa
   ports:
   - name: container
     port: 8080

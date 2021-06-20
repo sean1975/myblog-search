@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nginx
+  labels:
+    app: myblog-search
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myblog-search
+      name: nginx
+  serviceName: nginx
+  template:
+    metadata:
+      labels:
+        app: myblog-search
+        name: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: sean1975/myblog-search:nginx-gke
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
