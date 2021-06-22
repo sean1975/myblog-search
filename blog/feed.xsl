@@ -15,6 +15,23 @@
 <xsl:param name="namespace" select="'myblog'"/>
 <xsl:param name="document-type" select="'myblog'"/>
 
+<xsl:template name="nonbreakingspace">
+  <xsl:param name="text" select="."/>
+  <xsl:variable name="space">&amp;nbsp;</xsl:variable>
+  <xsl:choose>
+    <xsl:when test="contains($text, $space)">
+      <xsl:value-of select="substring-before($text, $space)"/>
+      <xsl:text> </xsl:text>
+      <xsl:call-template name="nonbreakingspace">
+        <xsl:with-param name="text" select="substring-after($text, $space)"/>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$text"/>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
 <xsl:template name="doublequotes">
   <xsl:param name="text" select="."/>
   <xsl:variable name="quot">"</xsl:variable>
@@ -100,8 +117,14 @@
 </xsl:template>
 
 <xsl:template match="atom:content">
+  <xsl:variable name="unescaped">
+    <xsl:call-template name="nonbreakingspace"/>
+  </xsl:variable>
+  <xsl:variable name="trimmed" select="normalize-space($unescaped)"/>
   <xsl:variable name="escaped">
-    <xsl:call-template name="doublequotes"/>
+    <xsl:call-template name="doublequotes">
+      <xsl:with-param name="text" select="$trimmed"/>
+    </xsl:call-template>
   </xsl:variable>
   <xsl:text>"body":"</xsl:text>
   <xsl:call-template name="htmltags">
