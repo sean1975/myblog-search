@@ -33,11 +33,17 @@ java -jar bin/vespa-http-client-jar-with-dependencies.jar \
     --verbose --file blog/feed.json --endpoint http://localhost:8080
 echo ""
 
+echo "Creating docker container for middleware"
+docker run -it --detach --name myblog-search-middleware \
+     --hostname myblog-search-middleware --publish 8000:80 \
+     --env BACKEND_URL="http://host.docker.internal:8080/search" \
+     sean1975/myblog-search:middleware
+
 echo "Creating docker container for frontend"
 docker run -it --detach --name myblog-search-nginx \
      --hostname myblog-search-nginx --publish 80:80 \
      sean1975/myblog-search:nginx
 
 echo "Running a test query" && sleep 5
-curl -s "http://localhost:80/search/?query=fish&presentation.format=xml"
+curl -s "http://localhost:80/search/fish"
 
