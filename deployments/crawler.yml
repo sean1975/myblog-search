@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: crawler
+spec:
+  template:
+    spec:
+      containers:
+      - name: crawler
+        image: sean1975/myblog-search:crawler
+        env:
+        - name: BACKEND_URL
+          value: "http://vespa.default.svc.cluster.local:8080"
+      restartPolicy: Never

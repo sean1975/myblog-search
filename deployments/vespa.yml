@@ -23,3 +23,24 @@ spec:
         imagePullPolicy: Always
         securityContext:
           privileged: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vespa
+  labels:
+    app: myblog-search
+spec:
+  type: ClusterIP
+  selector:
+    app: myblog-search
+    name: vespa
+  ports:
+  - name: container
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  - name: config
+    port: 19071
+    targetPort: 19071
+    protocol: TCP

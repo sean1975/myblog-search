@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: nginx
   labels:
@@ -10,7 +10,6 @@ spec:
     matchLabels:
       app: myblog-search
       name: nginx
-  serviceName: nginx
   template:
     metadata:
       labels:
@@ -23,3 +22,22 @@ spec:
         imagePullPolicy: Always
         securityContext:
           privileged: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  annotations:
+    cloud.google.com/load-balancer-type: "External"
+  labels:
+    app: myblog-search
+spec:
+  type: LoadBalancer
+  selector:
+    app: myblog-search
+    name: nginx
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    protocol: TCP

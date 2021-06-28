@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: middleware
   labels:
@@ -10,7 +10,6 @@ spec:
     matchLabels:
       app: myblog-search
       name: middleware
-  serviceName: middleware
   template:
     metadata:
       labels:
@@ -26,3 +25,20 @@ spec:
         imagePullPolicy: Always
         securityContext:
           privileged: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: middleware
+  labels:
+    app: myblog-search
+spec:
+  type: ClusterIP
+  selector:
+    app: myblog-search
+    name: middleware
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    protocol: TCP
