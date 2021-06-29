@@ -1,0 +1,10 @@
+div.searchbar {
+  text-align: center;
+  width: 100%;
+}
+form {
+  padding: 10px;
+}
+input.text {
+  width: 60%;
+}

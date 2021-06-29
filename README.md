@@ -14,4 +14,4 @@ at https://docs.vespa.ai/en/tutorials/text-search.html
 
 The frond end is a reverse proxy by NGINX and XSLT to transform search results from XML into HTML
 
-Live demo at http://34.87.254.125/search/%E9%AD%9A on Google Cloud Platform
+Live demo at http://34.87.254.125/search/?query=%E9%AD%9A on Google Cloud Platform

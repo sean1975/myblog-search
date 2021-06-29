@@ -12,6 +12,8 @@
   <xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html&gt;</xsl:text>
   <xsl:text disable-output-escaping="yes">&lt;html&gt;</xsl:text>
   <xsl:text disable-output-escaping="yes">&lt;head&gt;&lt;title&gt;Myblog Search&lt;/title&gt;&lt;head&gt;</xsl:text>
+  <xsl:text disable-output-escaping="yes">&lt;link rel="stylesheet" href="/mystyle.css"&gt;</xsl:text>
+  <xsl:text disable-output-escaping="yes">&lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/&gt;</xsl:text>
   <xsl:text disable-output-escaping="yes">&lt;body&gt;</xsl:text>
     <xsl:apply-templates/>
   <xsl:text disable-output-escaping="yes">&lt;/body&gt;</xsl:text>
@@ -19,12 +21,8 @@
 </xsl:template>
 
 <xsl:template match="result">
+  <xsl:text disable-output-escaping="yes">&lt;!--#include file="/searchbar.html" --&gt;</xsl:text>
   <xsl:text disable-output-escaping="yes">&lt;table&gt;</xsl:text>
-    <xsl:text disable-output-escaping="yes">&lt;tr&gt;</xsl:text>
-      <xsl:text disable-output-escaping="yes">&lt;th&gt;&lt;/th&gt;</xsl:text>
-      <xsl:text disable-output-escaping="yes">&lt;th&gt;Title&lt;/th&gt;</xsl:text>
-      <xsl:text disable-output-escaping="yes">&lt;th&gt;Body&lt;/th&gt;</xsl:text>
-    <xsl:text disable-output-escaping="yes">&lt;/tr&gt;</xsl:text>
     <xsl:apply-templates select="hit"/>
   <xsl:text disable-output-escaping="yes">&lt;/table&gt;</xsl:text>
 </xsl:template>

@@ -3,7 +3,7 @@ FROM golang:1.16
 WORKDIR /go
 
 ENV PORT=80
-ENV BACKEND_URL=http://localhost:8080/search
+ENV BACKEND_URL=http://localhost:8080
 EXPOSE $PORT
 
 COPY src/main.go src/main.go
