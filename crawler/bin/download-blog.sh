@@ -5,5 +5,5 @@ OUTPUT="feed.xml"
 
 [ ! -d "$DIR" ] && mkdir -p $DIR
 
-curl -s -o "$DIR/$OUTPUT" http://diaryofsean.blogspot.com/feeds/posts/default?max-results=1000
+curl -s -o "$DIR/$OUTPUT" http://blog.seanlee.site/feeds/posts/default?max-results=1000
 
