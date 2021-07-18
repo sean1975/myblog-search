@@ -1,7 +1,12 @@
 <div class="searchbar">
   <label>Myblog Search</label>
   <form action="/search/">
-    <input type="text" name="query" class="text">
+    <input type="text" id="query" name="query" class="text">
     <input type="submit" value="Search" class="button">
   </form>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryParam = urlParams.get('query');
+    document.getElementById("query").value=queryParam
+  </script>
 </div>
