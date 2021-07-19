@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+  vespa:
+    image: sean1975/myblog-search:vespa 
+    container_name: myblog-search-vespa
+    hostname: myblog-search-vespa
+    ports:
+      - 8080:8080
+      - 19112:19112
+      - 19071:19071
+    deploy:
+      resources:
+        limits:
+          memory: 6G
+  middleware:
+    image: sean1975/myblog-search:middleware
+    container_name: myblog-search-middleware
+    hostname: myblog-search-middleware
+    ports:
+      - 8000:80
+    environment:
+      - BACKEND_URL=http://host.docker.internal:8080
+  nginx:
+    image: sean1975/myblog-search:nginx
+    container_name: myblog-search-nginx
+    hostname: myblog-search-nginx
+    ports:
+      - 80:80

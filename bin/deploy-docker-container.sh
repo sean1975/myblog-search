@@ -1,10 +1,6 @@
 #!/bin/bash
 
-echo "Creating vespa container"
-docker run -m 12G --detach --name myblog-search-vespa \
-    --hostname myblog-search-vespa \
-    --publish 8080:8080 --publish 19112:19112 --publish 19071:19071 \
-    sean1975/myblog-search:vespa
+docker-compose -f deployments/docker-compose.yml up -d
 
 while [[ $(curl -s --head http://localhost:19071/ApplicationStatus | grep "^HTTP.*" | cut -d\  -f2) != "200" ]]; do
     echo "Waiting for vespa config server"
@@ -25,17 +21,6 @@ docker run -it --rm --name myblog-search-crawler \
      --env BACKEND_URL="http://host.docker.internal:8080" \
      sean1975/myblog-search:crawler
 
-echo "Creating docker container for middleware"
-docker run -it --detach --name myblog-search-middleware \
-     --hostname myblog-search-middleware --publish 8000:80 \
-     --env BACKEND_URL="http://host.docker.internal:8080" \
-     sean1975/myblog-search:middleware
-
-echo "Creating docker container for frontend"
-docker run -it --detach --name myblog-search-nginx \
-     --hostname myblog-search-nginx --publish 80:80 \
-     sean1975/myblog-search:nginx
-
 echo "Running a test query" && sleep 5
-curl -s "http://localhost:80/search/?query=fish"
+curl -s "http://localhost:80/search/?query=%E9%AD%9A"
 
