@@ -5,3 +5,4 @@ metadata:
   namespace: default
 data:
   BACKEND_URL: http://vespa.default.svc.cluster.local:8080
+  MIDDLEWARE_URL: http://middleware.default.svc.cluster.local:80
