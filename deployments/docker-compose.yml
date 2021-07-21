@@ -26,3 +26,5 @@ services:
     hostname: myblog-search-nginx
     ports:
       - 80:80
+    environment:
+      - MIDDLEWARE_URL=http://host.docker.internal:8000
