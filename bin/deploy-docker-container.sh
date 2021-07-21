@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker-compose -f deployments/docker-compose.yml up -d
+docker-compose -f docker-compose.yml up -d
 
 while [[ $(curl -s --head http://localhost:19071/ApplicationStatus | grep "^HTTP.*" | cut -d\  -f2) != "200" ]]; do
     echo "Waiting for vespa config server"
