@@ -8,7 +8,8 @@ spec:
       containers:
       - name: crawler
         image: sean1975/myblog-search:crawler
-        env:
-        - name: BACKEND_URL
-          value: "http://vespa.default.svc.cluster.local:8080"
+        envFrom:
+        - configMapRef:
+            name: myblog-search-env
+        imagePullPolicy: Always
       restartPolicy: Never

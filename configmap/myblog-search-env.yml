@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myblog-search-env
+  namespace: default
+data:
+  BACKEND_URL: http://vespa.default.svc.cluster.local:8080
