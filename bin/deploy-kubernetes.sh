@@ -27,7 +27,7 @@ kubectl exec vespa-0 -- bash -c 'for i in {1..10}; do sleep 10 && curl -s "http:
 
 kubectl create -f ${SRC_DIRECTORY}/middleware.yaml
 
-kubectl create -f ${SRC_DIRECTORY}/nginx.yaml
+kubectl create -k nginx
 
 kubectl create -f ${SRC_DIRECTORY}/service.yaml
 

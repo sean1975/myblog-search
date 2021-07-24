@@ -35,13 +35,34 @@ services:
     environment:
       - BACKEND_URL=http://host.docker.internal:8080
   nginx:
-    image: sean1975/myblog-search:nginx
+    image: nginx:1.21.0
     container_name: myblog-search-nginx
     hostname: myblog-search-nginx
     ports:
       - 80:80
     environment:
       - MIDDLEWARE_URL=http://host.docker.internal:8000
+    volumes:
+      - type: bind
+        source: ./nginx/etc/nginx.conf
+        target: /etc/nginx/nginx.conf
+        read_only: true
+      - type: bind
+        source: ./nginx/etc/templates/default.conf.template
+        target: /etc/nginx/templates/default.conf.template
+        read_only: true
+      - type: bind
+        source: ./nginx/html
+        target: /usr/share/nginx/html
+        read_only: true
+      - type: bind
+        source: ./nginx/css
+        target: /usr/share/nginx/css
+        read_only: true
+      - type: bind
+        source: ./nginx/xslt
+        target: /usr/share/nginx/xslt
+        read_only: true
 volumes:
   vespa-var:
     driver: local

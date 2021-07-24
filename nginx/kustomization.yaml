@@ -1,0 +1,20 @@
+resources:
+- nginx.yaml
+configMapGenerator:
+- name: nginx-conf
+  files:
+  - etc/nginx.conf
+- name: nginx-template
+  files:
+  - etc/templates/default.conf.template
+- name: nginx-html
+  files:
+  - html/index.html
+  - html/searchbar.html
+  - html/50x.html
+- name: nginx-css
+  files:
+  - css/mystyle.css
+- name: nginx-xslt
+  files:
+  - xslt/result.xsl

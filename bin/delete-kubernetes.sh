@@ -4,7 +4,7 @@ SRC_DIRECTORY=kubernetes
 
 kubectl delete -f ${SRC_DIRECTORY}/service.yaml
 
-kubectl delete -f ${SRC_DIRECTORY}/nginx.yaml
+kubectl delete -k nginx
 
 kubectl delete -f ${SRC_DIRECTORY}/middleware.yaml
 
