@@ -4,8 +4,8 @@
   <container id="mycontainer" version="1.0">
     <component id="com.qihoo.language.JiebaLinguistics" bundle="chinese-linguistics" >
       <config name="com.qihoo.language.config.dicts-loc">
-        <dictionaryPath>/opt/vespa/conf/dict</dictionaryPath>
-        <stopwordsPath>/opt/vespa/conf/stopwords</stopwordsPath>
+        <dictionaryPath>/opt/vespa/conf/jieba/dict.txt</dictionaryPath>
+        <stopwordsPath>/opt/vespa/conf/jieba/stopwords.txt</stopwordsPath>
       </config>
     </component>
     <search></search>

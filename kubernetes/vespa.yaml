@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: vespa
+  labels:
+    app: myblog-search
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myblog-search
+      name: vespa
+  serviceName: vespa
+  template:
+    metadata:
+      labels:
+        app: myblog-search
+        name: vespa
+    spec:
+      containers:
+      - name: vespa
+        image: vespaengine/vespa
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        readinessProbe:
+          httpGet:
+            path: /ApplicationStatus
+            port: 19071
+            scheme: HTTP
+        volumeMounts:
+        - name: vespa-var
+          mountPath: /opt/vespa/var
+        - name: vespa-logs
+          mountPath: /opt/vespa/logs
+        - name: vespa-conf-jieba
+          mountPath: /opt/vespa/conf/jieba
+        - name: vespa-application
+          mountPath: /application
+  volumeClaimTemplates:
+  - metadata:
+      name: vespa-var
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi
+  - metadata:
+      name: vespa-logs
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi
+  - metadata:
+      name: vespa-conf-jieba
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+  - metadata:
+      name: vespa-application
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vespa
+  labels:
+    app: myblog-search
+spec:
+  type: ClusterIP
+  selector:
+    app: myblog-search
+    name: vespa
+  ports:
+  - name: container
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
+  - name: config
+    port: 19071
+    targetPort: 19071
+    protocol: TCP

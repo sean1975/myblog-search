@@ -1,13 +1,27 @@
 version: '3.9'
 services:
   vespa:
-    image: sean1975/myblog-search:vespa 
+    image: vespaengine/vespa
     container_name: myblog-search-vespa
     hostname: myblog-search-vespa
     ports:
       - 8080:8080
       - 19112:19112
       - 19071:19071
+    volumes:
+      - type: volume
+        source: vespa-var
+        target: /opt/vespa/var
+      - type: volume
+        source: vespa-logs
+        target: /opt/vespa/logs
+      - type: bind
+        source: ./vespa/conf
+        target: /opt/vespa/conf/jieba
+      - type: bind
+        source: ./vespa/application
+        target: /application
+        read_only: true
     deploy:
       resources:
         limits:
@@ -28,3 +42,8 @@ services:
       - 80:80
     environment:
       - MIDDLEWARE_URL=http://host.docker.internal:8000
+volumes:
+  vespa-var:
+    driver: local
+  vespa-logs:
+    driver: local
