@@ -1,19 +1,17 @@
 #!/bin/bash
 
-SRC_DIRECTORY=kubernetes
-
-kubectl delete -f ${SRC_DIRECTORY}/service.yaml
+kubectl delete -f kubernetes/service.yaml
 
 kubectl delete -k nginx
 
-kubectl delete -f ${SRC_DIRECTORY}/middleware.yaml
+kubectl delete -f middleware/middleware.yaml
 
-kubectl delete -f ${SRC_DIRECTORY}/crawler.yaml
+kubectl delete -f crawler/crawler.yaml
 
-kubectl delete -f ${SRC_DIRECTORY}/vespa.yaml
+kubectl delete -f vespa/vespa.yaml
 kubectl delete pvc vespa-application-vespa-0
 kubectl delete pvc vespa-conf-jieba-vespa-0
 kubectl delete pvc vespa-logs-vespa-0
 kubectl delete pvc vespa-var-vespa-0
 
-kubectl delete -f ${SRC_DIRECTORY}/configmap/myblog-search-env.yaml
+kubectl delete -f kubernetes/myblog-search-env.yaml
