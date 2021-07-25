@@ -10,8 +10,27 @@ so there are duplication in the search results when a search keyword exists in b
 This application is to avoid the duplication in search results.
 
 The search application is based on Vespa Text Search Tutorial
-at https://docs.vespa.ai/en/tutorials/text-search.html
+at https://docs.vespa.ai/en/tutorials/text-search.html.
+It is deployed on Google Kubernetes Engine at http://search.seanlee.site/search/?query=%E9%AD%9A
 
-The frond end is a reverse proxy by NGINX and XSLT to transform search results from XML into HTML
+The back end is a single-node Vespa server. It is deployed as a stateful set with persistent
+volumes for storing search index.
 
-Live demo at http://search.seanlee.site/search/?query=%E9%AD%9A on Google Cloud Platform
+The middleware is a stateless Golang program to append parameters for Vespa to return search
+results in XML format instead of the default json format.
+
+The frond end is a stateless reverse proxy by NGINX. It forwards queries to the middleware and
+transform search results from XML into HTML by XSLT.
+
+The last component of this search application is a cralwer that downloads the blog articles
+in ATOM format, convert the articles into Vespa document format in json format by XSLT, and then
+feed the Vespa documents into the backend. It is deployed as a Kubernetes Job although it is
+ideally to be implemented as a Cronjob.
+
+The following is the data flow of this search application:
+<p>
+  HTTP client --> NGINX --> Middleware --> Vespa <-- Crawler <-- Blog
+</p>
+
+Docker Compose is also used, but only in local development environment. It is for practicing and
+comparing the functional difference between Kubernetes and Docker Compose.
