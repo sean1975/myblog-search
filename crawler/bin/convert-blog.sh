@@ -1,14 +1,19 @@
 #!/bin/bash
 
 DIR="blog"
-FILE="feed.xml"
-XSLT="feed.xsl"
-OUTPUT="feed.json"
+FILE="$DIR/feed.xml"
+XSLT="$DIR/feed.xsl"
+OUTPUT="$DIR/feed.json"
 
-if [ ! -f "$DIR/$FILE" ]; then
-  echo "$DIR/$FILE does not exist!"
+[ ! -z "$1" ] && FILE=$1
+[ ! -z "$2" ] && OUTPUT=$2
+
+if [ ! -f "$FILE" ]; then
+  echo "$FILE does not exist!"
   exit 1
 fi
 
-xsltproc $DIR/$XSLT $DIR/$FILE > $DIR/$OUTPUT
+[ -f "$OUTPUT" ] && rm $OUTPUT
+
+xsltproc $XSLT $FILE > $OUTPUT
 

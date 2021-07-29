@@ -6,6 +6,7 @@ RUN apk update
 RUN apk upgrade
 RUN apk add bash
 RUN apk add libxslt
+RUN apk add libxml2-utils
 RUN apk add openjdk11
 
 WORKDIR /crawler
