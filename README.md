@@ -1,6 +1,6 @@
 # myblog-search
 
-Application for searching my blog articles at http://diaryofsean.blogspot.com/
+Application for searching my blog articles at https://blog.seanlee.site/
 
 There are 145 articles: 105 articles in Chinese and 40 articles in English.
 All English articles have their counterpart in Chinese.
@@ -24,8 +24,10 @@ transform search results from XML into HTML by XSLT.
 
 The last component of this search application is a cralwer that downloads the blog articles
 in ATOM format, convert the articles into Vespa document format in json format by XSLT, and then
-feed the Vespa documents into the backend. It is deployed as a Kubernetes Job although it is
-ideally to be implemented as a Cronjob.
+feed the Vespa documents into the backend. It is deployed as a Kubernetes CronJob with a
+static persisent volume to retain the download blog feed. The retained feed is used for
+requesting only the recent updated blog feed instead of full feed. Also, the retained feed can
+be used for rebuilding/refeeding the search index.
 
 The following is the data flow of this search application:
 <p>
