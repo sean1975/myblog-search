@@ -2,14 +2,23 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: crawler
+  labels:
+    app: myblog-search
 spec:
   template:
     spec:
       containers:
       - name: crawler
         image: sean1975/myblog-search:crawler
+        imagePullPolicy: Always
         envFrom:
         - configMapRef:
             name: myblog-search-env
-        imagePullPolicy: Always
+        volumeMounts:
+        - name: crawler-volume
+          mountPath: /crawler/backup
       restartPolicy: Never
+      volumes:
+        - name: crawler-volume
+          persistentVolumeClaim:
+            claimName: crawler-pvc

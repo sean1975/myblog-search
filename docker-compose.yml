@@ -68,3 +68,5 @@ volumes:
     driver: local
   vespa-logs:
     driver: local
+  crawler-backup:
+    driver: local

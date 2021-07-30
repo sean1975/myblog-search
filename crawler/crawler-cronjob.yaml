@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: crawler
+  labels:
+    app: myblog-search
+spec:
+  schedule: "30 2 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: crawler
+            image: sean1975/myblog-search:crawler
+            imagePullPolicy: Always
+            envFrom:
+            - configMapRef:
+                name: myblog-search-env
+            volumeMounts:
+            - name: crawler-volume
+              mountPath: /crawler/backup
+          restartPolicy: Never
+          volumes:
+            - name: crawler-volume
+              persistentVolumeClaim:
+                claimName: crawler-pvc
