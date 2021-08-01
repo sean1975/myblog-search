@@ -23,6 +23,9 @@ spec:
         imagePullPolicy: Always
         securityContext:
           privileged: true
+        resources:
+          requests:
+            memory: "2Gi"
         readinessProbe:
           httpGet:
             path: /ApplicationStatus
@@ -37,6 +40,11 @@ spec:
           mountPath: /opt/vespa/conf/jieba
         - name: vespa-application
           mountPath: /application
+      tolerations:
+      - key: "dedicated"
+        operator: "Equal"
+        value: "vespa"
+        effect: "NoSchedule"
   volumeClaimTemplates:
   - metadata:
       name: vespa-var
