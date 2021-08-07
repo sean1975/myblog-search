@@ -12,6 +12,7 @@ configMapGenerator:
   - html/index.html
   - html/searchbar.html
   - html/50x.html
+  - html/maintenance.html
 - name: nginx-css
   files:
   - css/mystyle.css

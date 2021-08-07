@@ -5,6 +5,14 @@ server {
    root /usr/share/nginx/html;
    try_files $uri /index.html;
  }
+ error_page 500 502 503 504 /50x.html;
+ location /50x.html {
+   root /usr/share/nginx/html;
+   internal;
+ }
+ location /maintenance.html {
+   root /usr/share/nginx/html;
+ }
  location ~ css {
    root /usr/share/nginx/css;
    try_files $uri $uri/ =404;
@@ -19,6 +27,8 @@ server {
    proxy_set_header Host $http_host;
    proxy_cache_bypass $http_upgrade;
    proxy_redirect off;
+   proxy_intercept_errors on;
+   error_page 502 =302 /maintenance.html;
    xslt_stylesheet /usr/share/nginx/xslt/result.xsl;
  }
 }
