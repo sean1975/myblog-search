@@ -51,11 +51,27 @@
       </xsl:if>
     <xsl:text disable-output-escaping="yes">&lt;/td&gt;</xsl:text>
     <xsl:text disable-output-escaping="yes">&lt;td&gt;</xsl:text>
-      <xsl:if test="field[@name='body']">
-        <xsl:value-of select="field[@name='body']"/>
-      </xsl:if>
+      <xsl:apply-templates select="field[@name='body']"/>
     <xsl:text disable-output-escaping="yes">&lt;/td&gt;</xsl:text>
   <xsl:text disable-output-escaping="yes">&lt;/tr&gt;</xsl:text>
+</xsl:template>
+
+<xsl:template match="field">
+  <xsl:for-each select="./node()">
+    <xsl:choose>
+      <xsl:when test="name() = 'hi'">
+        <xsl:text disable-output-escaping="yes">&lt;b&gt;</xsl:text>
+        <xsl:value-of select="text()"/>
+        <xsl:text disable-output-escaping="yes">&lt;/b&gt;</xsl:text>
+      </xsl:when>
+      <xsl:when test="name() = 'sep'">
+        <xsl:text> ... </xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="."/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:for-each>
 </xsl:template>
 
 </xsl:transform>
