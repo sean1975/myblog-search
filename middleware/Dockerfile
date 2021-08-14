@@ -6,9 +6,10 @@ ENV PORT=80
 ENV BACKEND_URL=http://localhost:8080
 EXPOSE $PORT
 
-COPY src/main.go src/main.go
+COPY go.mod src/go.mod
+COPY main.go src/main.go
 
-RUN go build -o bin/main src/main.go
+RUN cd src && go install .
 
-CMD ["bin/main"]
+CMD ["bin/myblog-search"]
 
