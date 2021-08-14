@@ -8,6 +8,8 @@ EXPOSE $PORT
 
 COPY go.mod src/go.mod
 COPY main.go src/main.go
+COPY config src/config
+COPY search src/search
 
 RUN cd src && go install .
 
