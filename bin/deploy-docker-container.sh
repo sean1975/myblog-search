@@ -19,7 +19,7 @@ echo "Feeding documents"
 docker run -it --rm --name myblog-search-crawler \
      --hostname myblog-search-crawler \
      --env BACKEND_URL="http://host.docker.internal:8080" \
-     --volume crawler-backup:/crawler/backup \
+     --volume myblog-search_crawler-backup:/crawler/backup \
      sean1975/myblog-search:crawler
 
 echo "Running a test query" && sleep 5
