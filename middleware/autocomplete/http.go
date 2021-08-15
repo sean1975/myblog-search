@@ -38,10 +38,13 @@ type Result struct {
 }
 
 func rewriteResponseBody(responseBody []byte) ([]byte, error) {
-	var result map[string]interface{}
-	json.Unmarshal(responseBody, &result)
-	root := result["root"].(map[string]interface{})
 	results := make([]Result, 0)
+	var result map[string]interface{}
+	err := json.Unmarshal(responseBody, &result)
+	if err != nil {
+		return json.Marshal(results)
+	}
+	root := result["root"].(map[string]interface{})
 	if children, ok := root["children"].([]interface{}); ok {
 		for i := range children {
 			child := children[i].(map[string]interface{})
