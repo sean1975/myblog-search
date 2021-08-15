@@ -10,6 +10,7 @@ COPY go.mod src/go.mod
 COPY main.go src/main.go
 COPY config src/config
 COPY search src/search
+COPY autocomplete src/autocomplete
 
 RUN cd src && go install .
 
