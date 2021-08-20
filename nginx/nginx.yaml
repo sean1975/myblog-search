@@ -39,6 +39,9 @@ spec:
         - name: nginx-css-volume
           mountPath: /usr/share/nginx/css
           readOnly: true
+        - name: nginx-js-volume
+          mountPath: /usr/share/nginx/js
+          readOnly: true
         - name: nginx-xslt-volume
           mountPath: /usr/share/nginx/xslt
           readOnly: true
@@ -55,6 +58,9 @@ spec:
       - name: nginx-css-volume
         configMap:
           name: nginx-css
+      - name: nginx-js-volume
+        configMap:
+          name: nginx-js
       - name: nginx-xslt-volume
         configMap:
           name: nginx-xslt

@@ -1,12 +1,13 @@
-<div class="searchbar">
-  <label>Myblog Search</label>
-  <form action="/search/">
-    <input type="text" id="query" name="query" class="text">
-    <input type="submit" value="Search" class="button">
+<div>
+  <div class="center">
+    <label>Myblog Search</label>
+  </div>
+  <form autocomplete="off" action="/search/">
+    <div class="autocomplete">
+      <input type="text" id="query" name="query" class="text">
+      <input type="submit" value="Search">
+      <div id="autocomplete-list" class="autocomplete-items"></div>
+    </div>
   </form>
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const queryParam = urlParams.get('query');
-    document.getElementById("query").value=queryParam
-  </script>
+  <script src="/searchbar.js"></script>
 </div>

@@ -16,6 +16,9 @@ configMapGenerator:
 - name: nginx-css
   files:
   - css/mystyle.css
+- name: nginx-js
+  files:
+  - js/searchbar.js
 - name: nginx-xslt
   files:
   - xslt/result.xsl

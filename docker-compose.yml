@@ -60,6 +60,10 @@ services:
         target: /usr/share/nginx/css
         read_only: true
       - type: bind
+        source: ./nginx/js
+        target: /usr/share/nginx/js
+        read_only: true
+      - type: bind
         source: ./nginx/xslt
         target: /usr/share/nginx/xslt
         read_only: true
