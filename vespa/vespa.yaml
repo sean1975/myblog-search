@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: vespa
-        image: vespaengine/vespa
+        image: vespaengine/vespa:7.451.27
         imagePullPolicy: Always
         securityContext:
           privileged: true
@@ -36,8 +36,6 @@ spec:
           mountPath: /opt/vespa/var
         - name: vespa-logs
           mountPath: /opt/vespa/logs
-        - name: vespa-conf-jieba
-          mountPath: /opt/vespa/conf/jieba
         - name: vespa-application
           mountPath: /application
       tolerations:
@@ -60,13 +58,6 @@ spec:
       resources:
         requests:
           storage: 5Gi
-  - metadata:
-      name: vespa-conf-jieba
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 100Mi
   - metadata:
       name: vespa-application
     spec:

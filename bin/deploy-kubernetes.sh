@@ -10,9 +10,6 @@ kubectl create -f vespa/vespa.yaml
 
 while [[ $(kubectl get pods -l app=myblog-search -l name=vespa -o 'jsonpath={..status.conditions[?(@.type=="Ready")].status}' | sort -u) != "True" ]]; do echo "waiting for vespa configserver" && sleep 10; done
 
-kubectl cp vespa/conf/dict.txt vespa-0:/opt/vespa/conf/jieba/
-kubectl cp vespa/conf/stopwords.txt vespa-0:/opt/vespa/conf/jieba/
-
 kubectl cp vespa/application/hosts.xml vespa-0:/application/
 kubectl cp vespa/application/services.xml vespa-0:/application/
 kubectl cp vespa/application/schemas vespa-0:/application/

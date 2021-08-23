@@ -2,12 +2,7 @@
 <services version="1.0">
 
   <container id="mycontainer" version="1.0">
-    <component id="com.qihoo.language.JiebaLinguistics" bundle="chinese-linguistics" >
-      <config name="com.qihoo.language.config.dicts-loc">
-        <dictionaryPath>/opt/vespa/conf/jieba/dict.txt</dictionaryPath>
-        <stopwordsPath>/opt/vespa/conf/jieba/stopwords.txt</stopwordsPath>
-      </config>
-    </component>
+    <component id="myblogsearch.SimpleChineseLinguistics" bundle="myblog-search"></component>
     <search></search>
     <document-processing></document-processing>
     <document-api></document-api>

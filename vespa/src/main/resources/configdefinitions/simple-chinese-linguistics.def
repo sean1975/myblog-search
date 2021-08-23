@@ -1,0 +1,8 @@
+package=myblogsearch.config
+
+# The path to a stopwords file, or emopty if none
+stopwordsPath	string	default=""
+
+# The path to a dictionary file, or empty if none
+dictionaryPath	string	default=""
+
