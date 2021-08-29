@@ -23,7 +23,7 @@ The frond end is a stateless reverse proxy by NGINX. It forwards queries to the 
 transform search results from XML into HTML by XSLT.
 
 The last component of this search application is a cralwer that downloads the blog articles
-in ATOM format, convert the articles into Vespa document format in json format by XSLT, and then
+in ATOM format, convert the articles into Vespa document format in json format by Golang, and then
 feed the Vespa documents into the backend. It is deployed as a Kubernetes CronJob with a
 static persisent volume to retain the download blog feed. The retained feed is used for
 requesting only the recent updated blog feed instead of full feed. Also, the retained feed can
