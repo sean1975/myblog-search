@@ -1,19 +1,19 @@
 #!/bin/bash
 
+BASEDIR=`dirname $0`
 DIR="blog"
-FILE="$DIR/feed.xml"
-XSLT="$DIR/feed.xsl"
+INPUT="$DIR/feed.xml"
 OUTPUT="$DIR/feed.json"
 
-[ ! -z "$1" ] && FILE=$1
+[ ! -z "$1" ] && INPUT=$1
 [ ! -z "$2" ] && OUTPUT=$2
 
-if [ ! -f "$FILE" ]; then
-  echo "$FILE does not exist!"
+if [ ! -f "$INPUT" ]; then
+  echo "$INPUT does not exist!"
   exit 1
 fi
 
 [ -f "$OUTPUT" ] && rm $OUTPUT
 
-xsltproc $XSLT $FILE > $OUTPUT
+$BASEDIR/convert-blog -i $INPUT -o $OUTPUT
 
