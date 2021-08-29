@@ -10,6 +10,9 @@ spec:
     image: sean1975/myblog-search:crawler
     imagePullPolicy: Always
     command: ['sleep', 'infinity']
+    envFrom:
+    - configMapRef:
+          name: myblog-search-env
     volumeMounts:
     - name: crawler-volume
       mountPath: /crawler/backup
