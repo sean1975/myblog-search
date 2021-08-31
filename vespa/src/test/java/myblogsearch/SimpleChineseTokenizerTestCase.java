@@ -33,7 +33,7 @@ public class SimpleChineseTokenizerTestCase {
         TokenizerTester tester = new TokenizerTester().setStemMode(StemMode.ALL).setLanguage(Language.CHINESE_TRADITIONAL);
         tester.assertTokens(
             "很不幸地，我的經典款 iPhone 4S 不能安裝州政府的 app。",
-            "不幸", "經典", "款", " ", "iphon", " ", "4s", " ", "不能", "安裝", "政府", "州政府", " ", "app"
+            "不幸", "經典", "款", " ", "iphon", " ", "4s", " ", "不能", "安裝", "州政府", " ", "app"
         );
     }
 }

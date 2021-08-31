@@ -52,16 +52,10 @@ public class SimpleChineseTokenizer implements Tokenizer {
             if (stemMode != StemMode.NONE) {
                 token = stemmer.stem(token);
             }
-            TokenType tokenType;
-            //if (isChinese(language)) {
-            //    tokenType = TokenType.ALPHABETIC;
-            //} else {
-                tokenType = SimpleTokenType.valueOf(input.codePointAt(segment.getStart()));
-            //}
+            TokenType tokenType = SimpleTokenType.valueOf(input.codePointAt(segment.getStart()));
             tokens.add(new SimpleToken(original).setOffset(segment.getStart())
                                                 .setType(tokenType)
                                                 .setTokenString(token));
-            
         }
         return tokens;
     }
@@ -72,7 +66,7 @@ public class SimpleChineseTokenizer implements Tokenizer {
 
     private List<Span> tokenizeChinese(String input) {
         List<Span> tokens = new ArrayList<Span>();
-        for (SegToken token : segmenter.process(input, SegMode.INDEX)) {
+        for (SegToken token : segmenter.process(input, SegMode.SEARCH)) {
             if (stopwords.contains(token.word)) continue;
             tokens.add(new Span(token.startOffset, token.endOffset));
         }
