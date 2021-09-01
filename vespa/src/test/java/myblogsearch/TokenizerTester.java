@@ -42,7 +42,7 @@ public class TokenizerTester {
     }
 
     public Iterable<Token> tokenize(String input) {
-        SimpleChineseLinguisticsConfig.Builder builder = new SimpleChineseLinguisticsConfig.Builder();
+        SimpleChineseLinguisticsConfig.Builder builder = new SimpleChineseLinguisticsConfig.Builder().dictionaryPath("/cities.txt");
         Linguistics linguistics = new SimpleChineseLinguistics(builder.build());
         return linguistics.getTokenizer().tokenize(input, language, stemMode, accentDrop);
     }

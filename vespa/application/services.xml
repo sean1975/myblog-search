@@ -2,7 +2,11 @@
 <services version="1.0">
 
   <container id="mycontainer" version="1.0">
-    <component id="myblogsearch.SimpleChineseLinguistics" bundle="myblog-search"></component>
+    <component id="myblogsearch.SimpleChineseLinguistics" bundle="myblog-search">
+      <config name="myblogsearch.config.simple-chinese-linguistics">
+        <dictionaryPath>/cities.txt</dictionaryPath>
+      </config>
+    </component>
     <search></search>
     <document-processing></document-processing>
     <document-api></document-api>
