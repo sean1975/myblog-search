@@ -9,6 +9,7 @@ import (
 func main() {
 	inputFilenamePtr := flag.String("i", "feed.xml", "input filename")
 	outputFilenamePtr := flag.String("o", "feed.json", "output filename")
+	documentTypePtr := flag.String("t", "vespa", "output document type")
 	flag.Parse()
 	xmlFile, err := os.Open(*inputFilenamePtr)
 	if err != nil {
@@ -19,6 +20,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	convert.XmlToJson(xmlFile, jsonFile)
+	convert.XmlToJson(xmlFile, jsonFile, *documentTypePtr)
 	jsonFile.Close()
 }

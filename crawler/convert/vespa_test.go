@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestXmlToJson(t *testing.T) {
+func TestXmlToVespaJson(t *testing.T) {
 	xmlData := `
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="http://www.blogger.com/styles/atom.css" type="text/css"?>
@@ -29,7 +29,7 @@ func TestXmlToJson(t *testing.T) {
 	jsonData := `[{"put":"id:myblog:myblog::3214139340207317638","fields":{"language":"en","id":"3214139340207317638","title":"Blog Post Title","body":"Sentence1. Sentence2. Sentence3.","url":"http://blog.seanlee.site/2020/10/congratulations-your-application-has.html","thumbnail":"https://1.bp.blogspot.com/-VbZs62V8a9U/X8eDJBbbBWI/AAAAAAAAja4/jj8kbf5p-6YvDXx8FDoIJ27NB0K4-YZFACLcBGAsYHQ/s72-c/20201123_125051.jpg"}}]`
 	r := strings.NewReader(xmlData)
 	buf := new(bytes.Buffer)
-	err := XmlToJson(r, buf)
+	err := XmlToJson(r, buf, "vespa")
 	if err != nil {
 		t.Errorf("Failed to convert XML into Json, error %s", err)
 	}
@@ -38,7 +38,7 @@ func TestXmlToJson(t *testing.T) {
 	}
 }
 
-func TestXmlToJsonChinese(t *testing.T) {
+func TestXmlToVespaJsonChinese(t *testing.T) {
 	xmlData := `
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="http://www.blogger.com/styles/atom.css" type="text/css"?>
@@ -60,7 +60,7 @@ func TestXmlToJsonChinese(t *testing.T) {
 	jsonData := `[{"put":"id:myblog:myblog::3214139340207317638","fields":{"language":"zh-TW","id":"3214139340207317638","title":"Blog Post Title","body":"Sentence1. Sentence2. Sentence3.","url":"http://blog.seanlee.site/2020/10/congratulations-your-application-has.html","thumbnail":"https://1.bp.blogspot.com/-VbZs62V8a9U/X8eDJBbbBWI/AAAAAAAAja4/jj8kbf5p-6YvDXx8FDoIJ27NB0K4-YZFACLcBGAsYHQ/s72-c/20201123_125051.jpg"}}]`
 	r := strings.NewReader(xmlData)
 	buf := new(bytes.Buffer)
-	err := XmlToJson(r, buf)
+	err := XmlToJson(r, buf, "vespa")
 	if err != nil {
 		t.Errorf("Failed to convert XML into Json, error %s", err)
 	}
