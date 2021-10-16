@@ -24,6 +24,7 @@ RUN apk add openjdk11
 WORKDIR /crawler
 
 ENV BACKEND_URL=http://host.docker.internal:8080
+ENV BACKEND_TYPE=vespa
 
 COPY bin /crawler/bin
 COPY --from=build /go/bin/convert-blog /crawler/bin/convert-blog

@@ -2,15 +2,17 @@
 
 DIR="blog"
 FILE="$DIR/feed.json"
-TYPE="vespa"
 
 [ ! -z "$1" ] && FILE=$1
-[ ! -z "$2" ] && TYPE=$2
 
 [ ! -f "$FILE" ] && echo "$FILE does not exist!" && exit 1
 
 if [ -z "$BACKEND_URL" ]; then
     BACKEND_URL="http://localhost:8080"
+fi
+
+if [ -z "$BACKEND_TYPE" ]; then
+    BACKEND_TYPE="vespa"
 fi
 
 check_vespa_status()
@@ -25,7 +27,7 @@ check_elastic_status()
 
 check_backend_status()
 {
-    if [ $TYPE == "vespa" ]; then
+    if [ $BACKEND_TYPE == "vespa" ]; then
         check_vespa_status
     else
         check_elastic_status
@@ -45,7 +47,7 @@ feed_elastic()
 
 feed_backend()
 {
-    if [ $TYPE == "vespa" ]; then
+    if [ $BACKEND_TYPE == "vespa" ]; then
         feed_vespa
     else
         feed_elastic
@@ -55,11 +57,11 @@ feed_backend()
 
 check_backend_status
 if [ $? -ne 0 ]; then
-    echo "Backend $TYPE is not ready" && exit 1
+    echo "Backend $BACKEND_TYPE is not ready" && exit 1
 fi
 
 feed_backend
 if [ $? -ne 0 ]; then
-    echo "Failed to feed backend $TYPE" && exit 1
+    echo "Failed to feed backend $BACKEND_TYPE" && exit 1
 fi
 

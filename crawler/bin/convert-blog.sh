@@ -4,11 +4,13 @@ BASEDIR=`dirname $0`
 DIR="blog"
 INPUT="$DIR/feed.xml"
 OUTPUT="$DIR/feed.json"
-TYPE="vespa"
 
 [ ! -z "$1" ] && INPUT=$1
 [ ! -z "$2" ] && OUTPUT=$2
-[ ! -z "$3" ] && TYPE=$3
+
+if [ -z "$BACKEND_TYPE" ]; then
+    BACKEND_TYPE="vespa"
+fi
 
 if [ ! -f "$INPUT" ]; then
   echo "$INPUT does not exist!"
@@ -17,5 +19,5 @@ fi
 
 [ -f "$OUTPUT" ] && rm $OUTPUT
 
-$BASEDIR/convert-blog -i $INPUT -o $OUTPUT -t $TYPE
+$BASEDIR/convert-blog -i $INPUT -o $OUTPUT -t $BACKEND_TYPE
 
