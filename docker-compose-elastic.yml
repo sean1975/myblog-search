@@ -1,0 +1,68 @@
+version: '3.9'
+services:
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
+    container_name: myblog-search-elastic
+    environment:
+      - discovery.type=single-node
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - type: volume
+        source: elastic-data
+        target: /usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+  middleware:
+    image: sean1975/myblog-search:middleware
+    container_name: myblog-search-middleware
+    hostname: myblog-search-middleware
+    ports:
+      - 8000:80
+    environment:
+      - BACKEND_URL=http://host.docker.internal:9200
+      - BACKEND_TYPE=elastic
+  nginx:
+    image: nginx:1.21.0
+    container_name: myblog-search-nginx
+    hostname: myblog-search-nginx
+    ports:
+      - 80:80
+    environment:
+      - MIDDLEWARE_URL=http://host.docker.internal:8000
+    volumes:
+      - type: bind
+        source: ./nginx/etc/nginx.conf
+        target: /etc/nginx/nginx.conf
+        read_only: true
+      - type: bind
+        source: ./nginx/etc/templates/default.conf.template
+        target: /etc/nginx/templates/default.conf.template
+        read_only: true
+      - type: bind
+        source: ./nginx/html
+        target: /usr/share/nginx/html
+        read_only: true
+      - type: bind
+        source: ./nginx/css
+        target: /usr/share/nginx/css
+        read_only: true
+      - type: bind
+        source: ./nginx/js
+        target: /usr/share/nginx/js
+        read_only: true
+      - type: bind
+        source: ./nginx/xslt
+        target: /usr/share/nginx/xslt
+        read_only: true
+volumes:
+  elastic-data:
+    driver: local
+  crawler-backup:
+    driver: local

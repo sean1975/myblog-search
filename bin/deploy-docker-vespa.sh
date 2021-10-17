@@ -1,6 +1,6 @@
 #!/bin/bash
 
-docker-compose -f docker-compose.yml up -d
+docker-compose -f docker-compose-vespa.yml up -d
 
 while [[ $(curl -s --head http://localhost:19071/ApplicationStatus | grep "^HTTP.*" | cut -d\  -f2) != "200" ]]; do
     echo "Waiting for vespa config server"
@@ -19,6 +19,7 @@ echo "Feeding documents"
 docker run -it --rm --name myblog-search-crawler \
      --hostname myblog-search-crawler \
      --env BACKEND_URL="http://host.docker.internal:8080" \
+     --env BACKEND_TYPE="vespa" \
      --volume myblog-search_crawler-backup:/crawler/backup \
      sean1975/myblog-search:crawler
 

@@ -21,6 +21,10 @@ func GetBackendUrl() *url.URL {
     return backendUrl
 }
     
+func GetBackendType() string {
+    return getEnv("BACKEND_TYPE", "vespa")
+}
+
 func GetListenAddress() string {
     port := getEnv("PORT", "80")
     return ":" + port

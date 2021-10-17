@@ -4,12 +4,14 @@ WORKDIR /go
 
 ENV PORT=80
 ENV BACKEND_URL=http://localhost:8080
+ENV BACKEND_TYPE=vespa
 EXPOSE $PORT
 
 COPY go.mod src/go.mod
 COPY main.go src/main.go
 COPY config src/config
-COPY search src/search
+COPY vespa src/vespa
+COPY elastic src/elastic
 COPY autocomplete src/autocomplete
 
 RUN cd src && go install .

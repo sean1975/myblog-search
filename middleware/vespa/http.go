@@ -1,4 +1,4 @@
-package search
+package vespa
 
 import (
 	"github.com/sean1975/myblog-search/config"
@@ -13,6 +13,10 @@ func appendQueryValues(query url.Values) url.Values {
 		query.Add("presentation.format", "xml")
 	}
 	return query
+}
+
+func rewriteRequestUrl(req *http.Request) {
+	req.URL.Path = "/search"
 }
 
 func rewriteRequest(req *http.Request) {

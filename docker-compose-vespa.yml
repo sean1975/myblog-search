@@ -31,6 +31,7 @@ services:
       - 8000:80
     environment:
       - BACKEND_URL=http://host.docker.internal:8080
+      - BACKEND_TYPE=vespa
   nginx:
     image: nginx:1.21.0
     container_name: myblog-search-nginx
