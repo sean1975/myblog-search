@@ -26,21 +26,20 @@ server {
    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
    proxy_set_header X-NginX-Proxy true;
    proxy_set_header Accept-Encoding "";
-   proxy_pass ${MIDDLEWARE_URL};
+   proxy_pass ${MIDDLEWARE_URL}/search/;
    proxy_ssl_session_reuse off;
    proxy_set_header Host $http_host;
    proxy_cache_bypass $http_upgrade;
    proxy_redirect off;
    proxy_intercept_errors on;
    error_page 502 =302 /maintenance.html;
-   xslt_stylesheet /usr/share/nginx/xslt/result.xsl;
  }
  location /autocomplete/ {
    proxy_set_header X-Real-IP $remote_addr;
    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
    proxy_set_header X-NginX-Proxy true;
    proxy_set_header Accept-Encoding "";
-   proxy_pass ${MIDDLEWARE_URL};
+   proxy_pass ${MIDDLEWARE_URL}/autocomplete/;
    proxy_ssl_session_reuse off;
    proxy_set_header Host $http_host;
    proxy_cache_bypass $http_upgrade;

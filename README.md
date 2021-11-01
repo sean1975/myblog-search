@@ -17,10 +17,10 @@ The back end is a single-node Vespa server. It is deployed as a stateful set wit
 volumes for storing search index.
 
 The middleware is a stateless Golang program to append parameters for Vespa to return search
-results in XML format instead of the default json format.
+results in JSON format.
 
 The frond end is a stateless reverse proxy by NGINX. It forwards queries to the middleware and
-transform search results from XML into HTML by XSLT.
+render search results by Vue.js.
 
 The last component of this search application is a cralwer that downloads the blog articles
 in ATOM format, convert the articles into Vespa document format in json format by Golang, and then

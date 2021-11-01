@@ -1,9 +1,3 @@
-function initQueryParam(inp) {
-  const urlParams = new URLSearchParams(window.location.search);
-  const queryParam = urlParams.get('query');
-  inp.value=queryParam;
-}
-
 function initAutoComplete(inp) {
   let abortController;
 
@@ -145,7 +139,6 @@ function initAutoComplete(inp) {
 
 function init() {
   let inp = document.getElementById("query");
-  initQueryParam(inp);
   initAutoComplete(inp);
 }
 

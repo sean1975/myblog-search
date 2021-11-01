@@ -1,13 +1,43 @@
-<div>
+<div id="searchbar">
   <div class="center">
     <label>Myblog Search</label>
   </div>
-  <form autocomplete="off" action="/search/">
+  <form autocomplete="off">
     <div class="autocomplete">
-      <input type="text" id="query" name="query" class="text">
+      <input type="text" id="query" name="query" class="text" v-bind:value="query">
       <input type="submit" value="Search">
       <div id="autocomplete-list" class="autocomplete-items"></div>
     </div>
   </form>
-  <script src="/searchbar.js"></script>
+  <table>
+    <tr v-for="hit in results" :key="hit.id">
+      <td><image v-bind:src="hit.thumbnail"></image></td>
+      <td><a v-bind:href="hit.url" v-text="hit.title"></a></td>
+      <td v-html="hit.body"></td>
+    </tr>
+  </table>
 </div>
+<script src="https://unpkg.com/vue@next"></script>
+<script>
+function getQueryParam() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const queryParam = urlParams.get('query');
+  return queryParam;
+}
+
+Vue.createApp({
+  data() {
+    return {
+      query: getQueryParam(),
+      results: null
+    }
+  },
+  created() {
+    let query = getQueryParam();
+    fetch("/search/?query=" + query)
+      .then(response => response.json())
+      .then(data => this.results = data);
+  }
+}).mount('#searchbar')
+</script>
+<script src="/searchbar.js"></script>
