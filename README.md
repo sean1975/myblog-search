@@ -11,7 +11,7 @@ This application is to avoid the duplication in search results.
 
 The search application is based on Vespa Text Search Tutorial
 at https://docs.vespa.ai/en/tutorials/text-search.html.
-It is deployed on Google Kubernetes Engine at http://search.seanlee.site/search/?query=%E9%AD%9A
+It is deployed on Google Kubernetes Engine at https://search.seanlee.site/?query=%E9%AD%9A
 
 The back end is a single-node Vespa server. It is deployed as a stateful set with persistent
 volumes for storing search index.
