@@ -65,10 +65,76 @@ func rewriteRequest(req *http.Request) {
 	rewriteRequestUrl(req)
 }
 
+type ElasticSearchResult struct {
+	Hits Hits			`json:"hits"`
+}
+
+type Hits struct {
+	InnerHits []InnerHit		`json:"hits"`
+}
+
+type InnerHit struct {
+	Index string			`json:"_index"`
+	Type string			`json:"_type"`
+	Id string			`json:"_id"`
+	Score float64			`json:"_score"`
+	Fields Fields			`json:"fields"`
+	Highlight Highlight		`json:"highlight"`
+}
+
+type Fields struct {
+	Title []string			`json:"title"`
+	Url []string			`json:"url"`
+	Thumbnail []string		`json:"thumbnail"`
+}
+
+type Highlight struct {
+	Body []string			`json:"body"`
+}
+
+type SearchResult struct {
+	Id string			`json:"id"`
+	Title string			`json:"title"`
+	Body string			`json:"body"`
+	Url string			`json:"url"`
+	Thumbnail string		`json:"thumbnail"`
+}
+
+func newResponseBody(body []byte) []byte {
+	var result ElasticSearchResult
+	json.Unmarshal(body, &result)
+	var newResult = make([]SearchResult, len(result.Hits.InnerHits))
+	for i, hit := range result.Hits.InnerHits {
+		newResult[i].Id = hit.Id
+		newResult[i].Title = hit.Fields.Title[0]
+		newResult[i].Url = hit.Fields.Url[0]
+		newResult[i].Thumbnail = hit.Fields.Thumbnail[0]
+		newResult[i].Body = hit.Highlight.Body[0]
+	}
+	newBody, _ := json.Marshal(newResult)
+	return newBody
+}
+
+func rewriteResponseBody(res *http.Response) {
+	body, _ := ioutil.ReadAll(res.Body)
+	newBody := newResponseBody(body)
+	buf := bytes.NewBuffer(newBody)
+	res.Body = ioutil.NopCloser(buf)
+	res.Header["Content-Length"] = []string{fmt.Sprint(buf.Len())}
+}
+
+func rewriteResponse(res *http.Response) error {
+	if res.StatusCode == 200 {
+		rewriteResponseBody(res)
+	}
+	return nil
+}
+
 func HttpHandleFunc(res http.ResponseWriter, req *http.Request) {
 	log.Printf("Request %s\n", req.URL.String())
 	backendUrl := config.GetBackendUrl()
 	proxy := httputil.NewSingleHostReverseProxy(backendUrl)
+	proxy.ModifyResponse = rewriteResponse
 	rewriteRequest(req)
 	log.Printf("Redirect %s%s?%s\n", backendUrl.String(), req.URL.Path, req.URL.RawQuery)
 	proxy.ServeHTTP(res, req)
