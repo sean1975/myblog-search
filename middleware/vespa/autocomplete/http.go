@@ -86,6 +86,6 @@ func rewriteResponse(res *http.Response) error {
 	return nil
 }
 
-func NewSearchHandler() *httputil.ReverseProxy {
+func NewHttpHandler() *httputil.ReverseProxy {
 	return &httputil.ReverseProxy{Director: rewriteRequest, ModifyResponse: rewriteResponse}
 }

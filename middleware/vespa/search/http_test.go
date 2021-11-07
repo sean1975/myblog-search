@@ -1,4 +1,4 @@
-package vespa
+package search
 
 import (
 	"net/http"

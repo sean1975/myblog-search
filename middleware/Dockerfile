@@ -12,7 +12,6 @@ COPY main.go src/main.go
 COPY config src/config
 COPY vespa src/vespa
 COPY elastic src/elastic
-COPY autocomplete src/autocomplete
 
 RUN cd src && go install .
 
