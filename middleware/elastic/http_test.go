@@ -1,8 +1,8 @@
-package elastic 
+package elastic
 
 import (
-	"net/http"
 	"io/ioutil"
+	"net/http"
 	"strings"
 	"testing"
 )
@@ -31,7 +31,7 @@ func TestRewriteRequestBody(t *testing.T) {
 func TestRewriteRequestUrl(t *testing.T) {
 	req, _ := http.NewRequest("GET", "http://localhost/elastic", nil)
 	rewriteRequestUrl(req)
-	if req.URL.String() != "http://localhost/_search/template" {
+	if req.URL.String() != "http://localhost:8080/_search/template" {
 		t.Errorf("Failed to rewrite request url: " + req.URL.String())
 	}
 }

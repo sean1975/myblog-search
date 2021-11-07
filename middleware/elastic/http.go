@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
+	"strings"
 )
 
 func getQueryString(req *http.Request) string {
@@ -31,12 +32,12 @@ func removeQueryString(req *http.Request) {
 }
 
 type SearchTemplate struct {
-	Id string		`json:"id"`
-	Params Params		`json:"params"`
+	Id     string `json:"id"`
+	Params Params `json:"params"`
 }
 
 type Params struct {
-	QueryString string	`json:"query_string"`
+	QueryString string `json:"query_string"`
 }
 
 func newRequestBody(queryString string) []byte {
@@ -56,48 +57,62 @@ func rewriteRequestBody(req *http.Request) {
 }
 
 func rewriteRequestUrl(req *http.Request) {
-	req.URL.Path = "/_search/template"
+	backendUrl := config.GetBackendUrl()
+	if !strings.HasSuffix(backendUrl.EscapedPath(), "/") {
+		backendUrl.Path += "/"
+	}
+	backendUrl.Path += "_search/template"
+	req.URL.Scheme = backendUrl.Scheme
+	req.URL.Host = backendUrl.Host
+	req.URL.Path = backendUrl.Path
+	req.URL.RawPath = backendUrl.Path
+	if _, ok := req.Header["User-Agent"]; !ok {
+		// explicitly disable User-Agent so it's not set to default value
+		req.Header.Set("User-Agent", "")
+	}
 }
 
 func rewriteRequest(req *http.Request) {
+	log.Printf("Request %s\n", req.URL.String())
 	rewriteRequestBody(req)
 	removeQueryString(req)
 	rewriteRequestUrl(req)
+	log.Printf("Redirect %s\n", req.URL.String())
 }
 
 type ElasticSearchResult struct {
-	Hits Hits			`json:"hits"`
+	Hits Hits `json:"hits"`
 }
 
 type Hits struct {
-	InnerHits []InnerHit		`json:"hits"`
+	InnerHits []InnerHit `json:"hits"`
 }
 
 type InnerHit struct {
-	Index string			`json:"_index"`
-	Type string			`json:"_type"`
-	Id string			`json:"_id"`
-	Score float64			`json:"_score"`
-	Fields Fields			`json:"fields"`
-	Highlight Highlight		`json:"highlight"`
+	Index     string    `json:"_index"`
+	Type      string    `json:"_type"`
+	Id        string    `json:"_id"`
+	Score     float64   `json:"_score"`
+	Fields    Fields    `json:"fields"`
+	Highlight Highlight `json:"highlight"`
 }
 
 type Fields struct {
-	Title []string			`json:"title"`
-	Url []string			`json:"url"`
-	Thumbnail []string		`json:"thumbnail"`
+	Title     []string `json:"title"`
+	Url       []string `json:"url"`
+	Thumbnail []string `json:"thumbnail"`
 }
 
 type Highlight struct {
-	Body []string			`json:"body"`
+	Body []string `json:"body"`
 }
 
 type SearchResult struct {
-	Id string			`json:"id"`
-	Title string			`json:"title"`
-	Body string			`json:"body"`
-	Url string			`json:"url"`
-	Thumbnail string		`json:"thumbnail"`
+	Id        string `json:"id"`
+	Title     string `json:"title"`
+	Body      string `json:"body"`
+	Url       string `json:"url"`
+	Thumbnail string `json:"thumbnail"`
 }
 
 func newResponseBody(body []byte) []byte {
@@ -130,13 +145,6 @@ func rewriteResponse(res *http.Response) error {
 	return nil
 }
 
-func HttpHandleFunc(res http.ResponseWriter, req *http.Request) {
-	log.Printf("Request %s\n", req.URL.String())
-	backendUrl := config.GetBackendUrl()
-	proxy := httputil.NewSingleHostReverseProxy(backendUrl)
-	proxy.ModifyResponse = rewriteResponse
-	rewriteRequest(req)
-	log.Printf("Redirect %s%s?%s\n", backendUrl.String(), req.URL.Path, req.URL.RawQuery)
-	proxy.ServeHTTP(res, req)
-	
+func NewSearchHandler() *httputil.ReverseProxy {
+	return &httputil.ReverseProxy{Director: rewriteRequest, ModifyResponse: rewriteResponse}
 }

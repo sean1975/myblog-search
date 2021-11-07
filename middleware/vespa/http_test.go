@@ -33,7 +33,7 @@ func TestRewriteRequestJson(t *testing.T) {
 func TestRewriteRequestUrl(t *testing.T) {
 	req, _ := http.NewRequest("GET", "http://localhost/vespa", nil)
 	rewriteRequestUrl(req)
-	if req.URL.String() != "http://localhost/search/" {
+	if req.URL.String() != "http://localhost:8080/search/" {
 		t.Errorf("Failed to rewrite request url " + req.URL.String())
 	}
 }

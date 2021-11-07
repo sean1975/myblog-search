@@ -26,10 +26,28 @@ func rewriteQueryValues(query url.Values) url.Values {
 	return query
 }
 
+func rewriteRequestUrl(req *http.Request) {
+	backendUrl := config.GetBackendUrl()
+	if !strings.HasSuffix(backendUrl.EscapedPath(), "/") {
+		backendUrl.Path += "/"
+	}
+	backendUrl.Path += "search/"
+	req.URL.Scheme = backendUrl.Scheme
+	req.URL.Host = backendUrl.Host
+	req.URL.Path = backendUrl.Path
+	req.URL.RawPath = backendUrl.Path
+	if _, ok := req.Header["User-Agent"]; !ok {
+		// explicitly disable User-Agent so it's not set to default value
+		req.Header.Set("User-Agent", "")
+	}
+}
+
 func rewriteRequest(req *http.Request) {
+	log.Printf("Request %s\n", req.URL.String())
 	query := req.URL.Query()
 	req.URL.RawQuery = rewriteQueryValues(query).Encode()
-	req.URL.Path = strings.Replace(req.URL.Path, "autocomplete", "search", 1)
+	rewriteRequestUrl(req)
+	log.Printf("Redirect %s\n", req.URL.String())
 }
 
 type Result struct {
@@ -68,12 +86,6 @@ func rewriteResponse(res *http.Response) error {
 	return nil
 }
 
-func HttpHandleFunc(res http.ResponseWriter, req *http.Request) {
-	log.Printf("Request %s\n", req.URL.String())
-	backendUrl := config.GetBackendUrl()
-	proxy := httputil.NewSingleHostReverseProxy(backendUrl)
-	proxy.ModifyResponse = rewriteResponse
-	rewriteRequest(req)
-	log.Printf("Redirect %s%s?%s\n", backendUrl.String(), req.URL.Path, req.URL.RawQuery)
-	proxy.ServeHTTP(res, req)
+func NewSearchHandler() *httputil.ReverseProxy {
+	return &httputil.ReverseProxy{Director: rewriteRequest, ModifyResponse: rewriteResponse}
 }
