@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: elastic
+  labels:
+    app: myblog-search
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myblog-search
+      name: elastic
+  serviceName: elastic
+  template:
+    metadata:
+      labels:
+        app: myblog-search
+        name: elastic
+    spec:
+      containers:
+      - name: elastic
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        resources:
+          requests:
+            memory: "2Gi"
+        readinessProbe:
+          httpGet:
+            path: /_cluster/health?local=true
+            port: 9200
+            scheme: HTTP
+        volumeMounts:
+        - name: elastic-data
+          mountPath: /usr/share/elasticsearch/data
+        env:
+        - name: discovery.type
+          value: "single-node"
+      tolerations:
+      - key: "dedicated"
+        operator: "Equal"
+        value: "elastic"
+        effect: "NoSchedule"
+  volumeClaimTemplates:
+  - metadata:
+      name: elastic-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elastic
+  labels:
+    app: myblog-search
+spec:
+  type: ClusterIP
+  selector:
+    app: myblog-search
+    name: elastic
+  ports:
+  - name: elastic
+    port: 9200
+    targetPort: 9200
+    protocol: TCP

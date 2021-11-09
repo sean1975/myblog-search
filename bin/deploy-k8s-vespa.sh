@@ -37,4 +37,4 @@ kubectl create -k nginx
 kubectl create -f kubernetes/service.yaml
 
 echo "running end-to-end test"
-for i in {1..3}; do sleep 10 && curl -s "http://localhost:80/search/?query=%E9%AD%9A" | grep -o "<a href=[^>]*>[^<>]*<\/a>"; if [ $? -eq 0 ]; then echo "successful" && break; fi; echo "retry..."; done
+for i in {1..3}; do sleep 10 && curl -s "http://localhost:80/search/?query=%E9%AD%9A" | grep -o "\"title\":\"[^\"]*\""; if [ $? -eq 0 ]; then echo "successful" && break; fi; echo "retry..."; done

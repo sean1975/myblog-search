@@ -4,6 +4,6 @@ metadata:
   name: myblog-search-env
   namespace: default
 data:
-  BACKEND_URL: http://vespa.default.svc.cluster.local:8080
+  BACKEND_URL: http://elastic.default.svc.cluster.local:9200
   MIDDLEWARE_URL: http://middleware.default.svc.cluster.local:80
-  BACKEND_TYPE: vespa
+  BACKEND_TYPE: elastic
