@@ -51,8 +51,8 @@ func rewriteRequest(req *http.Request) {
 }
 
 type Result struct {
-	Title string `json:title`
-	Url   string `json:url`
+	Title string `json:"title"`
+	Url   string `json:"url"`
 }
 
 func rewriteResponseBody(responseBody []byte) ([]byte, error) {

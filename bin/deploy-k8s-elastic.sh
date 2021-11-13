@@ -19,6 +19,9 @@ elastic/bin/create_index.sh
 elastic/bin/create_search_template.sh
 [ $? -ne 0 ] && echo "Failed to create search template" && jobs && kill %1 exit 1
 
+elastic/bin/create_autocomplete_template.sh
+[ $? -ne 0 ] && echo "Failed to create autocomplete template" && jobs && kill %1 exit 1
+
 kubectl create -f crawler/crawler-pvc.yaml
 
 kubectl create -f crawler/crawler-batch.yaml

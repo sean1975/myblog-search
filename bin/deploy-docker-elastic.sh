@@ -27,6 +27,10 @@ echo "Creating search template"
 $ELASTIC/create_search_template.sh
 [ $? -ne 0 ] && echo "Failed to create search template" && exit 1
 
+echo "Creating autocomplete template"
+$ELASTIC/create_autocomplete_template.sh
+[ $? -ne 0 ] && echo "Failed to create autocomplete template" && exit 1
+
 echo "Running a test query" && sleep 5
 curl -s -X GET "http://localhost:8000/search/?query=fish&pretty"
 

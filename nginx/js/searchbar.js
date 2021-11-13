@@ -69,10 +69,10 @@ function initAutoComplete(inp) {
       for (i = 0; i < searchSuggestions.length; i++) {
         let autoCompleteItem = document.createElement("DIV");
         autoCompleteItemLink = document.createElement('A');
-        autoCompleteItemText = document.createTextNode(searchSuggestions[i].Title);
+        autoCompleteItemText = document.createTextNode(searchSuggestions[i].title);
         autoCompleteItemLink.appendChild(autoCompleteItemText);
-        autoCompleteItemLink.title = searchSuggestions[i].Title;
-        autoCompleteItemLink.href = searchSuggestions[i].Url;
+        autoCompleteItemLink.title = searchSuggestions[i].title;
+        autoCompleteItemLink.href = searchSuggestions[i].url;
         autoCompleteItem.appendChild(autoCompleteItemLink);
         autoCompleteList.appendChild(autoCompleteItem);
       }
