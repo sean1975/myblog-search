@@ -20,7 +20,9 @@ jobs:
     - name: Build the Docker image
       run: cd middleware ; docker build . --file Dockerfile --tag myblog-search:middleware
     - name: Login Docker Hub
-      run: docker login -u $DOCKER_USERNAME -p $${secrets.DOCKER_PASSWORD}}
+      env:
+        DOCKER_PASSWORD: $${secrets.DOCKER_PASSWORD}}
+      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     - name: Push the Docker image to Docker Hub
       run: docker push $DOCKER_USERNAME/myblog-search:middleware
       
