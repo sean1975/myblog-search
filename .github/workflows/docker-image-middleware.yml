@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: cd middleware ; docker build . --file Dockerfile --tag myblog-search:middleware
+      run: cd middleware ; docker build . --file Dockerfile --tag $DOCKER_USERNAME/myblog-search:middleware
     - name: Login Docker Hub
       run: docker login -u $DOCKER_USERNAME -p ${{secrets.DOCKER_PASSWORD}}
     - name: Push the Docker image to Docker Hub
