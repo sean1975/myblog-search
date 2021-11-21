@@ -4,46 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/sean1975/myblog-search/config"
+	"github.com/sean1975/myblog-search/vespa"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/http/httputil"
 	"strings"
 )
-
-func rewriteQueryValues(req *http.Request) {
-	query := req.URL.Query()
-	if _, ok := query["presentation.format"]; !ok {
-		query.Add("presentation.format", "json")
-	} else {
-		query.Set("presentation.format", "json")
-	}
-	req.URL.RawQuery = query.Encode()
-}
-
-func rewriteRequestUrl(req *http.Request) {
-	backendUrl := config.GetBackendUrl()
-	if !strings.HasSuffix(backendUrl.EscapedPath(), "/") {
-		backendUrl.Path += "/"
-	}
-	backendUrl.Path += "search/"
-	req.URL.Scheme = backendUrl.Scheme
-	req.URL.Host = backendUrl.Host
-	req.URL.Path = backendUrl.Path
-	req.URL.RawPath = backendUrl.Path
-	if _, ok := req.Header["User-Agent"]; !ok {
-		// explicitly disable User-Agent so it's not set to default value
-		req.Header.Set("User-Agent", "")
-	}
-}
-
-func rewriteRequest(req *http.Request) {
-	log.Printf("Request %s\n", req.URL.String())
-	rewriteQueryValues(req)
-	rewriteRequestUrl(req)
-	log.Printf("Redirect %s\n", req.URL.String())
-}
 
 type VespaSearchResult struct {
 	Root Root `json:"root"`
@@ -104,5 +70,5 @@ func rewriteResponse(res *http.Response) error {
 }
 
 func NewHttpHandler() *httputil.ReverseProxy {
-	return &httputil.ReverseProxy{Director: rewriteRequest, ModifyResponse: rewriteResponse}
+	return &httputil.ReverseProxy{Director: vespa.RewriteRequest, ModifyResponse: rewriteResponse}
 }
