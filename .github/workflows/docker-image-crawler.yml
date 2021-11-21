@@ -1,0 +1,26 @@
+name: Docker Image Crawler CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'crawler/**'
+      - '!crawler/*.yaml'
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: cd crawler ; docker build . --file Dockerfile --tag $DOCKER_USERNAME/myblog-search:crawler
+    - name: Login Docker Hub
+      run: docker login -u $DOCKER_USERNAME -p ${{secrets.DOCKER_PASSWORD}}
+    - name: Push the Docker image to Docker Hub
+      run: docker push $DOCKER_USERNAME/myblog-search:crawler
+      
