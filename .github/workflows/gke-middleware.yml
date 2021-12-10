@@ -7,6 +7,9 @@ on:
     paths:
       - 'middleware/*.yaml'
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Docker Image Middleware CI"]
+    types: [completed]
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
@@ -16,6 +19,7 @@ env:
 jobs:
   deployment:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     environment: production
     concurrency: middleware
 
