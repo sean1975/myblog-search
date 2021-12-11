@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/sean1975/myblog-search/elastic"
+	"github.com/sean1975/myblog-search/utils"
 	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
@@ -50,8 +51,14 @@ func newResponseBody(body []byte) []byte {
 
 func rewriteResponseBody(res *http.Response) {
 	body, _ := ioutil.ReadAll(res.Body)
-	newBody := newResponseBody(body)
-	buf := bytes.NewBuffer(newBody)
+	if res.Header.Get("Content-Encoding") == "gzip" {
+		body = utils.Gunzip(body)
+	}
+	body = newResponseBody(body)
+	if res.Header.Get("Content-Encoding") == "gzip" {
+		body = utils.Gzip(body)
+	}
+	buf := bytes.NewBuffer(body)
 	res.Body = ioutil.NopCloser(buf)
 	res.Header["Content-Length"] = []string{fmt.Sprint(buf.Len())}
 }
