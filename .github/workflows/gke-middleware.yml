@@ -45,10 +45,19 @@ jobs:
         location: ${{ env.GKE_ZONE }}
         credentials: ${{ secrets.GKE_SA_KEY }}
 
-    # Deploy to the GKE cluster
+    # Deploy to the GKE cluster when middleware.yaml is changed
     - name: Deploy
+      if: ${{ github.event_name == 'push' }}
       run: |-
         kubectl apply -f middleware/middleware.yaml
+        kubectl rollout status deployment/middleware
+        kubectl get services/middleware -o wide
+
+    # Otherwise restart pods on the GKE cluster to pull the latest docker image
+    - name: Restart
+      if: ${{ github.event_name != 'push' }}
+      run: |-
+        kubectl rollout restart deployment/middleware
         kubectl rollout status deployment/middleware
         kubectl get services/middleware -o wide
 
