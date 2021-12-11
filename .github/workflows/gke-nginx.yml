@@ -46,3 +46,11 @@ jobs:
       run: |-
         kubectl apply -k nginx
         kubectl rollout status deployment/nginx
+
+    # Purge Cache in Cloudflare
+    - name: Purge Cache
+      run: |-
+        curl -X POST "https://api.cloudflare.com/client/v4/zones/c6869f31dcf1a5fa41d2dec2ca149250/purge_cache" \
+             -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+             -H "Content-Type:application/json" \
+             --data '{"purge_everything":true}'
