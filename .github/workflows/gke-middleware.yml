@@ -16,12 +16,13 @@ env:
   GKE_CLUSTER: taiwan-cluster
   GKE_ZONE: asia-east1-a
 
+concurrency: middleware
+
 jobs:
   deployment:
     runs-on: ubuntu-latest
     if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     environment: production
-    concurrency: middleware
 
     steps:
     - name: Checkout

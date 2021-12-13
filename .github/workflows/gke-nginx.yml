@@ -13,11 +13,12 @@ env:
   GKE_CLUSTER: taiwan-cluster
   GKE_ZONE: asia-east1-a
 
+concurrency: nginx
+
 jobs:
   deployment:
     runs-on: ubuntu-latest
     environment: production
-    concurrency: nginx
 
     steps:
     - name: Checkout
