@@ -42,8 +42,18 @@ jobs:
         location: ${{ env.GKE_ZONE }}
         credentials: ${{ secrets.GKE_SA_KEY }}
 
-    # Deploy to the GKE cluster
+    # Deploy to the GKE cluster when elastic.yaml is changed
     - name: Deploy
+      if: ${{ github.event_name == 'push' }}
       run: |-
-        kubectl apply -k elastic
+        kubectl apply -f elastic/elastic.yaml
         kubectl rollout status statefulset/elastic
+        kubectl get services/elastic -o wide
+
+    # Otherwise restart pods on the GKE cluster to pull the latest docker image
+    - name: Restart
+      if: ${{ github.event_name != 'push' }}
+      run: |-
+        kubectl rollout restart statefulset/elastic
+        kubectl rollout status statefulset/elastic
+        kubectl get services/elastic -o wide
